@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Personajes de Rick and Morty</title>
+  <style>
+    /* Estilos simples para la página */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Buscador de Personajes de Rick and Morty</h1>
+    <input type="text" id="searchInput" placeholder="Buscar por nombre...">
+    <button onclick="searchCharacters()">Buscar</button>
+    <ul id="characterList"></ul>
+  </div>
+
+  <script>
+    // Función para realizar la búsqueda de personajes
+    function searchCharacters() {
+      const searchInput = document.getElementById('searchInput').value;
+      const apiUrl = `https://rickandmortyapi.com/api/character/?name=${searchInput}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Error al conectarse a la API');
+          }
+        })
+        .then(data => {
+          const characterList = document.getElementById('characterList');
+          characterList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+          // Iterar sobre los resultados y agregar cada personaje a la lista
+          data.results.forEach(character => {
+            const li = document.createElement('li');
+            li.textContent = character.name;
+            characterList.appendChild(li);
+          });
+        })
+        .catch(error => {
+          console.error(error.message);
+        });
+    }
+  </script>
+</body>
+</html>
